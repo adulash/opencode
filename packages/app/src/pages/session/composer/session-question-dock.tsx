@@ -541,6 +541,7 @@ export const SessionQuestionDock: Component<{ request: QuestionRequest; onSubmit
                 placeholder={customPlaceholder()}
                 value={input()}
                 rows={1}
+                dir="auto"
                 disabled={sending()}
                 onKeyDown={(e) => {
                   if (e.key === "Escape") {

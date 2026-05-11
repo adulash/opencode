@@ -30,7 +30,7 @@
     gap: 8px;
     width: fit-content;
     max-width: min(82%, 64ch);
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   [data-slot="user-message-attachment"] {
@@ -115,7 +115,7 @@
   [data-slot="user-message-body"] {
     width: fit-content;
     max-width: min(82%, 64ch);
-    margin-left: auto;
+    margin-inline-start: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -130,6 +130,8 @@
     white-space: pre-wrap;
     word-break: break-word;
     overflow: hidden;
+    unicode-bidi: plaintext;
+    text-align: start;
     background: var(--surface-base);
     border: 1px solid var(--border-weak-base);
     padding: 8px 12px;
@@ -167,7 +169,7 @@
 
   [data-slot="user-message-meta"] {
     user-select: none;
-    text-align: right;
+    text-align: end;
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
@@ -189,7 +191,7 @@
     user-select: none;
     flex: 0 0 auto;
     white-space: nowrap;
-    text-align: right;
+    text-align: end;
   }
 
   &:hover [data-slot="user-message-copy-wrapper"],
@@ -213,6 +215,8 @@
 
   [data-slot="text-part-body"] {
     margin-top: 0;
+    unicode-bidi: plaintext;
+    text-align: start;
   }
 
   [data-slot="text-part-copy-wrapper"] {
@@ -366,7 +370,7 @@
   [data-slot="bash-copy"] {
     position: absolute;
     top: 4px;
-    right: 4px;
+    inset-inline-end: 4px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.15s ease;
@@ -1272,4 +1276,11 @@
     flex-shrink: 0;
     color: var(--icon-weak);
   }
+}
+
+html[dir="rtl"] [data-component="tool-output"],
+html[dir="rtl"] [data-component="bash-output"] {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
 }
