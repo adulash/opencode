@@ -10,6 +10,7 @@ export type SelectProps<T> = Omit<ComponentProps<typeof Kobalte<T>>, "value" | "
   current?: T
   value?: (x: T) => string
   label?: (x: T) => string
+  textValue?: (x: T) => string
   groupBy?: (x: T) => string
   valueClass?: ComponentProps<"div">["class"]
   onSelect?: (value: T | undefined) => void
@@ -31,6 +32,7 @@ export function Select<T>(props: SelectProps<T> & Omit<ButtonProps, "children">)
     "current",
     "value",
     "label",
+    "textValue",
     "groupBy",
     "valueClass",
     "onSelect",
@@ -93,7 +95,9 @@ export function Select<T>(props: SelectProps<T> & Omit<ButtonProps, "children">)
       value={local.current}
       options={grouped()}
       optionValue={(x) => (local.value ? local.value(x) : (x as string))}
-      optionTextValue={(x) => (local.label ? local.label(x) : (x as string))}
+      optionTextValue={(x) =>
+        local.textValue ? local.textValue(x) : local.label ? local.label(x) : (x as string)
+      }
       optionGroupChildren="options"
       placeholder={local.placeholder}
       sectionComponent={(local) => (
