@@ -61,14 +61,15 @@
     flex-shrink: 0;
     max-width: 280px;
     border-bottom: 1px solid var(--border-weak-base);
-    border-right: 1px solid var(--border-weak-base);
+    border-inline-end: 1px solid var(--border-weak-base);
     background-color: var(--background-base);
 
     [data-slot="tabs-trigger"] {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 14px 24px 14px 12px;
+      padding-block: 14px;
+      padding-inline: 12px 24px;
       outline: none;
       min-width: 0;
       overflow: hidden;
@@ -111,10 +112,10 @@
       color: var(--text-strong);
     }
     &:has([data-slot="tabs-trigger-close-button"]) {
-      padding-right: 12px;
+      padding-inline-end: 12px;
 
       [data-slot="tabs-trigger"] {
-        padding-right: 0;
+        padding-inline-end: 0;
       }
     }
   }
@@ -140,8 +141,8 @@
 
     [data-slot="tabs-list"] {
       height: var(--tabs-bar-height);
-      padding-left: 12px;
-      padding-right: 0;
+      padding-inline-start: 12px;
+      padding-inline-end: 0;
       --tabs-review-gap: 16px;
       --tabs-review-fade: 16px;
       gap: var(--tabs-review-gap);
@@ -161,10 +162,15 @@
           position: absolute;
           top: 0;
           bottom: 0;
-          left: calc(var(--tabs-review-fade) * -1);
+          inset-inline-start: calc(var(--tabs-review-fade) * -1);
           width: var(--tabs-review-fade);
           pointer-events: none;
           background: linear-gradient(90deg, transparent, var(--background-stronger));
+        }
+
+        /* & cannot represent a pseudo-element, so the flip must nest at the element level */
+        html[dir="rtl"] &::before {
+          background: linear-gradient(270deg, transparent, var(--background-stronger));
         }
       }
     }
@@ -212,9 +218,9 @@
       }
 
       &:has([data-slot="tabs-trigger-close-button"]) {
-        padding-right: 5px;
+        padding-inline-end: 5px;
         [data-slot="tabs-trigger"] {
-          padding-right: 0 !important;
+          padding-inline-end: 0 !important;
         }
       }
 
@@ -332,9 +338,9 @@
       }
 
       &:has([data-slot="tabs-trigger-close-button"]) {
-        padding-right: 0;
+        padding-inline-end: 0;
         [data-slot="tabs-trigger"] {
-          padding-right: 0;
+          padding-inline-end: 0;
         }
       }
     }
@@ -444,7 +450,7 @@
       padding: 8px;
       gap: 4px;
       background-color: var(--background-base);
-      border-right: 1px solid var(--border-weak-base);
+      border-inline-end: 1px solid var(--border-weak-base);
 
       &::after {
         display: none;
@@ -526,7 +532,7 @@
         padding: 12px;
         gap: 0;
         background-color: var(--background-base);
-        border-right: 1px solid var(--border-weak-base);
+        border-inline-end: 1px solid var(--border-weak-base);
 
         &::after {
           display: none;
@@ -535,7 +541,8 @@
 
       [data-slot="tabs-section-title"] {
         width: 100%;
-        padding: 0 0 0 4px;
+        padding: 0;
+        padding-inline-start: 4px;
         font-family: var(--font-family-sans);
         font-size: var(--font-size-small);
         font-weight: var(--font-weight-medium);

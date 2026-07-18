@@ -205,6 +205,7 @@ export const { use: useLanguage, provider: LanguageProvider } = createSimpleCont
 
     const locale = createMemo<Locale>(() => normalizeLocale(store.locale))
     const intl = createMemo(() => INTL[locale()])
+    const dir = createMemo<"rtl" | "ltr">(() => (RTL_LOCALES.has(locale()) ? "rtl" : "ltr"))
 
     const [dict] = createResource(locale, loadDict, {
       initialValue: dicts.get(initial) ?? base,
@@ -220,7 +221,7 @@ export const { use: useLanguage, provider: LanguageProvider } = createSimpleCont
     createEffect(() => {
       if (typeof document !== "object") return
       document.documentElement.lang = locale()
-      document.documentElement.dir = RTL_LOCALES.has(locale()) ? "rtl" : "ltr"
+      document.documentElement.dir = dir()
       document.cookie = cookie(locale())
     })
 
@@ -228,6 +229,7 @@ export const { use: useLanguage, provider: LanguageProvider } = createSimpleCont
       ready,
       locale,
       intl,
+      dir,
       locales: LOCALES,
       label,
       t,

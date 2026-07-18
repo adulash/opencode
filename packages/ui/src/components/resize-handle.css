@@ -56,3 +56,15 @@
     }
   }
 }
+
+html[dir="rtl"] [data-component="resize-handle"][data-direction="horizontal"] {
+  transform: translateX(-50%);
+
+  &[data-edge="start"] {
+    transform: translateX(50%);
+  }
+
+  &::after {
+    transform: translateX(50%);
+  }
+}

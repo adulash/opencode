@@ -272,7 +272,7 @@ export function Titlebar() {
               <div
                 class="flex items-center shrink-0"
                 classList={{
-                  "-translate-x-[36px]": layout.sidebar.opened() && !!params.dir,
+                  "-translate-x-[36px] rtl:translate-x-[36px]": layout.sidebar.opened() && !!params.dir,
                   "duration-180 ease-out": !layout.sidebar.opened(),
                   "duration-180 ease-in": layout.sidebar.opened(),
                 }}
@@ -282,7 +282,7 @@ export function Titlebar() {
                     <Tooltip placement="bottom" value={language.t("common.goBack")} openDelay={2000}>
                       <Button
                         variant="ghost"
-                        icon="chevron-left"
+                        icon={language.dir() === "rtl" ? "chevron-right" : "chevron-left"}
                         class="titlebar-icon w-6 h-6 p-0 box-border"
                         disabled={!canBack()}
                         onClick={back}
@@ -292,7 +292,7 @@ export function Titlebar() {
                     <Tooltip placement="bottom" value={language.t("common.goForward")} openDelay={2000}>
                       <Button
                         variant="ghost"
-                        icon="chevron-right"
+                        icon={language.dir() === "rtl" ? "chevron-left" : "chevron-right"}
                         class="titlebar-icon w-6 h-6 p-0 box-border"
                         disabled={!canForward()}
                         onClick={forward}

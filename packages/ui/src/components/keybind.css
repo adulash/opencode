@@ -1,4 +1,6 @@
 [data-component="keybind"] {
+  direction: ltr;
+  unicode-bidi: isolate;
   display: flex;
   align-items: center;
   justify-content: center;

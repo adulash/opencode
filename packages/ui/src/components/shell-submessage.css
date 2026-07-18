@@ -21,3 +21,9 @@
   line-height: inherit;
   white-space: nowrap;
 }
+
+html[dir="rtl"] [data-component="shell-submessage"] {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+}

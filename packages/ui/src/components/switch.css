@@ -130,3 +130,13 @@
     pointer-events: none;
   }
 }
+
+html[dir="rtl"] [data-component="switch"] {
+  [data-slot="switch-thumb"] {
+    transform: translateX(1px);
+  }
+
+  &[data-checked] [data-slot="switch-thumb"] {
+    transform: translateX(-12px);
+  }
+}

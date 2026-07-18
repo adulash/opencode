@@ -653,6 +653,7 @@ export const Terminal = (props: TerminalProps) => {
       ref={container}
       data-component="terminal"
       data-prevent-autofocus
+      dir="ltr"
       tabIndex={-1}
       style={{ "background-color": terminalColors().background }}
       classList={{

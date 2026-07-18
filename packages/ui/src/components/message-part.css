@@ -450,7 +450,7 @@
   }
 
   [data-slot="message-part-title-spinner"] {
-    margin-left: 4px;
+    margin-inline-start: 4px;
     width: 16px;
     height: 16px;
     display: inline-flex;
@@ -485,6 +485,8 @@
     flex-grow: 1;
     min-width: 0;
     font-weight: var(--font-weight-regular);
+    /* paths are LTR content; keep directory/filename order stable under RTL */
+    direction: ltr;
   }
 
   [data-slot="message-part-directory"] {
@@ -646,9 +648,9 @@
 
 [data-component="context-tool-group-list"] {
   padding-top: 0;
-  padding-right: 0;
+  padding-inline-end: 0;
   padding-bottom: 0;
-  padding-left: 12px;
+  padding-inline-start: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -959,7 +961,7 @@
     border: 1px solid var(--border-weak-base);
     border-radius: 6px;
     box-shadow: none;
-    text-align: left;
+    text-align: start;
     width: 100%;
     cursor: pointer;
     transition:
@@ -1075,7 +1077,7 @@
   }
 
   [data-slot="question-custom-input-wrap"] {
-    padding-left: 36px;
+    padding-inline-start: 36px;
   }
 
   [data-slot="question-custom-input"] {
@@ -1198,6 +1200,8 @@
     flex-grow: 1;
     min-width: 0;
     overflow: hidden;
+    /* paths are LTR content; keep directory/filename order stable under RTL */
+    direction: ltr;
   }
 
   [data-slot="apply-patch-directory"] {
@@ -1279,7 +1283,8 @@
 }
 
 html[dir="rtl"] [data-component="tool-output"],
-html[dir="rtl"] [data-component="bash-output"] {
+html[dir="rtl"] [data-component="bash-output"],
+html[dir="rtl"] [data-component="exa-tool-output"] {
   direction: ltr;
   text-align: left;
   unicode-bidi: isolate;

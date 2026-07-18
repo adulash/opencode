@@ -263,6 +263,12 @@ function getDirectory(path: string | undefined) {
   return relativizeProjectPath(_getDirectory(path), data.directory)
 }
 
+// LRE...PDF so the directory's leading-ellipsis hack (direction: rtl) cannot reorder path segments
+function bidiWrap(text: string | undefined) {
+  if (!text) return text
+  return `\u202A${text}\u202C`
+}
+
 import type { IconProps } from "./icon"
 import { normalize } from "./session-diff"
 
@@ -1290,7 +1296,7 @@ function ToolFileAccordion(props: { path: string; actions?: JSX.Element; childre
                 <FileIcon node={{ path: props.path, type: "file" }} />
                 <div data-slot="apply-patch-file-name-container">
                   <Show when={props.path.includes("/")}>
-                    <span data-slot="apply-patch-directory">{`\u202A${getDirectory(props.path)}\u202C`}</span>
+                    <span data-slot="apply-patch-directory">{bidiWrap(getDirectory(props.path))}</span>
                   </Show>
                   <span data-slot="apply-patch-filename">{getFilename(props.path)}</span>
                 </div>
@@ -1923,7 +1929,7 @@ ToolRegistry.register({
                 </div>
                 <Show when={!pending() && props.input.filePath?.includes("/")}>
                   <div data-slot="message-part-path">
-                    <span data-slot="message-part-directory">{getDirectory(props.input.filePath!)}</span>
+                    <span data-slot="message-part-directory">{bidiWrap(getDirectory(props.input.filePath!))}</span>
                   </div>
                 </Show>
               </div>
@@ -1984,7 +1990,7 @@ ToolRegistry.register({
                 </div>
                 <Show when={!pending() && props.input.filePath?.includes("/")}>
                   <div data-slot="message-part-path">
-                    <span data-slot="message-part-directory">{getDirectory(props.input.filePath!)}</span>
+                    <span data-slot="message-part-directory">{bidiWrap(getDirectory(props.input.filePath!))}</span>
                   </div>
                 </Show>
               </div>
@@ -2092,7 +2098,9 @@ ToolRegistry.register({
                                   <FileIcon node={{ path: file.relativePath, type: "file" }} />
                                   <div data-slot="apply-patch-file-name-container">
                                     <Show when={file.relativePath.includes("/")}>
-                                      <span data-slot="apply-patch-directory">{`\u202A${getDirectory(file.relativePath)}\u202C`}</span>
+                                      <span data-slot="apply-patch-directory">
+                                        {bidiWrap(getDirectory(file.relativePath))}
+                                      </span>
                                     </Show>
                                     <span data-slot="apply-patch-filename">{getFilename(file.relativePath)}</span>
                                   </div>
@@ -2163,7 +2171,7 @@ ToolRegistry.register({
                   </div>
                   <Show when={!pending() && single()!.relativePath.includes("/")}>
                     <div data-slot="message-part-path">
-                      <span data-slot="message-part-directory">{getDirectory(single()!.relativePath)}</span>
+                      <span data-slot="message-part-directory">{bidiWrap(getDirectory(single()!.relativePath))}</span>
                     </div>
                   </Show>
                 </div>

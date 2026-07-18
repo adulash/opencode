@@ -10,7 +10,8 @@
   background: transparent;
   border: none;
   border-radius: var(--radius-md);
-  padding: var(--card-pad-y) var(--card-pad-r) var(--card-pad-y) var(--card-pad-l);
+  padding-block: var(--card-pad-y);
+  padding-inline: var(--card-pad-l) var(--card-pad-r);
 
   /* text-14-regular */
   font-family: var(--font-family-sans);
@@ -39,7 +40,7 @@
   &::before {
     content: "";
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     top: var(--card-line-pad);
     bottom: var(--card-line-pad);
     width: 2px;
@@ -89,6 +90,6 @@
   }
 
   :where([data-card="actions"], [data-slot="card-actions"]) {
-    padding-left: var(--card-indent);
+    padding-inline-start: var(--card-indent);
   }
 }
