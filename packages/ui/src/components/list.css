@@ -269,7 +269,7 @@
 
           [data-slot="list-item-extra-icon"] {
             color: var(--icon-base);
-            margin-left: -4px;
+            margin-inline-start: -4px;
           }
 
           [data-slot="list-item-divider"] {

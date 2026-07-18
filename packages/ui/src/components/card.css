@@ -89,6 +89,6 @@
   }
 
   :where([data-card="actions"], [data-slot="card-actions"]) {
-    padding-left: var(--card-indent);
+    padding-inline-start: var(--card-indent);
   }
 }

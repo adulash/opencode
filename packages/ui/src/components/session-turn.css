@@ -124,7 +124,7 @@
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.15s ease;
-    margin-left: 4px;
+    margin-inline-start: 4px;
   }
 
   [data-component="session-turn-diffs-group"]:hover [data-slot="session-turn-diffs-toggle"] {
@@ -181,7 +181,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     direction: rtl;
-    text-align: left;
+    text-align: start;
   }
 
   [data-slot="session-turn-diff-filename"] {
