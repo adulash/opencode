@@ -166,10 +166,11 @@
           width: var(--tabs-review-fade);
           pointer-events: none;
           background: linear-gradient(90deg, transparent, var(--background-stronger));
+        }
 
-          html[dir="rtl"] & {
-            background: linear-gradient(270deg, transparent, var(--background-stronger));
-          }
+        /* & cannot represent a pseudo-element, so the flip must nest at the element level */
+        html[dir="rtl"] &::before {
+          background: linear-gradient(270deg, transparent, var(--background-stronger));
         }
       }
     }

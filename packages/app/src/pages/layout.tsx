@@ -2065,9 +2065,9 @@ export default function Layout(props: ParentProps) {
     return (
       <div
         classList={{
-          "flex flex-col min-h-0 min-w-0 box-border rounded-tl-[12px] px-3": true,
+          "flex flex-col min-h-0 min-w-0 box-border rounded-ss-[12px] px-3": true,
           "border border-b-0 border-border-weak-base": !merged(),
-          "border-l border-t border-border-weaker-base": merged(),
+          "border-s border-t border-border-weaker-base": merged(),
           "bg-background-base": merged() || hover(),
           "bg-background-stronger": !merged() && !hover(),
           "flex-1 min-w-0": panelProps.mobile,
@@ -2099,8 +2099,8 @@ export default function Layout(props: ParentProps) {
         >
           {(project) => (
             <>
-              <div class="shrink-0 pl-1 py-1">
-                <div class="group/project flex items-start justify-between gap-2 py-2 pl-2 pr-0">
+              <div class="shrink-0 ps-1 py-1">
+                <div class="group/project flex items-start justify-between gap-2 py-2 ps-2 pe-0">
                   <div class="flex flex-col min-w-0">
                     <InlineEditor
                       id={`project:${projectId()}`}
@@ -2500,7 +2500,7 @@ export default function Layout(props: ParentProps) {
         </div>
         {import.meta.env.DEV && <DebugBar />}
       </div>
-      <Toast.Region />
+      <Toast.Region swipeDirection={language.dir() === "rtl" ? "left" : "right"} />
     </div>
   )
 }

@@ -169,6 +169,8 @@
     display: flex;
     flex-grow: 1;
     min-width: 0;
+    /* paths are LTR content; keep directory/filename order stable under RTL */
+    direction: ltr;
 
     font-family: var(--font-family-sans);
     font-size: var(--font-size-small);
@@ -181,7 +183,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     direction: rtl;
-    text-align: start;
+    text-align: left;
   }
 
   [data-slot="session-turn-diff-filename"] {
