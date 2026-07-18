@@ -324,13 +324,15 @@ export const SessionQuestionDock: Component<{ request: QuestionRequest; onSubmit
     if (!(target instanceof HTMLElement)) return
     if (event.altKey || event.ctrlKey || event.metaKey) return
 
-    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+    const forwardKey = language.dir() === "rtl" ? "ArrowLeft" : "ArrowRight"
+    const backKey = language.dir() === "rtl" ? "ArrowRight" : "ArrowLeft"
+    if (event.key === "ArrowDown" || event.key === forwardKey) {
       event.preventDefault()
       move(1)
       return
     }
 
-    if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+    if (event.key === "ArrowUp" || event.key === backKey) {
       event.preventDefault()
       move(-1)
       return

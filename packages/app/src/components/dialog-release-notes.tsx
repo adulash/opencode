@@ -50,11 +50,13 @@ export function DialogReleaseNotes(props: { highlights: Highlight[] }) {
     }
 
     if (!paged()) return
-    if (e.key === "ArrowLeft" && !isFirst()) {
+    const backKey = language.dir() === "rtl" ? "ArrowRight" : "ArrowLeft"
+    const forwardKey = language.dir() === "rtl" ? "ArrowLeft" : "ArrowRight"
+    if (e.key === backKey && !isFirst()) {
       e.preventDefault()
       setIndex(index() - 1)
     }
-    if (e.key === "ArrowRight" && !isLast()) {
+    if (e.key === forwardKey && !isLast()) {
       e.preventDefault()
       setIndex(index() + 1)
     }
