@@ -1,0 +1,59 @@
+name: fork-release
+run-name: "fork release ${{ inputs.version || github.ref_name }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.0.0-ar.1, without leading v)"
+        required: true
+        type: string
+  push:
+    tags:
+      - "v*"
+
+concurrency: fork-release
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Fork-only release pipeline; never run on the upstream repository.
+    if: github.repository != 'anomalyco/opencode'
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-bun
+
+      - name: Resolve version
+        id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "v${{ steps.version.outputs.version }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create "v${{ steps.version.outputs.version }}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "v${{ steps.version.outputs.version }}" \
+              --generate-notes
+
+      # build.ts compiles every target, zips dist/*, and uploads the archives
+      # to the release itself when OPENCODE_RELEASE is set (see Script.release).
+      - name: Build and upload binaries
+        working-directory: packages/opencode
+        env:
+          OPENCODE_VERSION: ${{ steps.version.outputs.version }}
+          OPENCODE_RELEASE: "1"
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: bun run script/build.ts
