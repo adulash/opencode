@@ -28,6 +28,9 @@ export function ResizeHandle(props: ResizeHandleProps) {
   const handleMouseDown = (e: MouseEvent) => {
     e.preventDefault()
     const edge = local.edge ?? (local.direction === "vertical" ? "start" : "end")
+    // edge is logical; horizontal drags move in flipped screen direction under RTL
+    const flip =
+      local.direction === "horizontal" && getComputedStyle(e.currentTarget as HTMLElement).direction === "rtl" ? -1 : 1
     const start = local.direction === "horizontal" ? e.clientX : e.clientY
     const startSize = local.size
     let current = startSize
@@ -45,7 +48,7 @@ export function ResizeHandle(props: ResizeHandleProps) {
           : edge === "start"
             ? start - pos
             : pos - start
-      current = startSize + delta
+      current = startSize + delta * flip
       const clamped = Math.min(local.max, Math.max(local.min, current))
       local.onResize(clamped)
     }
