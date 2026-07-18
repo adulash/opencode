@@ -40,3 +40,8 @@
     }
   }
 }
+
+html[dir="rtl"] [data-component="file"] {
+  direction: ltr;
+  text-align: left;
+}

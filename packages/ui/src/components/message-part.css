@@ -485,6 +485,8 @@
     flex-grow: 1;
     min-width: 0;
     font-weight: var(--font-weight-regular);
+    /* paths are LTR content; keep directory/filename order stable under RTL */
+    direction: ltr;
   }
 
   [data-slot="message-part-directory"] {
@@ -1198,6 +1200,8 @@
     flex-grow: 1;
     min-width: 0;
     overflow: hidden;
+    /* paths are LTR content; keep directory/filename order stable under RTL */
+    direction: ltr;
   }
 
   [data-slot="apply-patch-directory"] {
@@ -1279,7 +1283,8 @@
 }
 
 html[dir="rtl"] [data-component="tool-output"],
-html[dir="rtl"] [data-component="bash-output"] {
+html[dir="rtl"] [data-component="bash-output"],
+html[dir="rtl"] [data-component="exa-tool-output"] {
   direction: ltr;
   text-align: left;
   unicode-bidi: isolate;
