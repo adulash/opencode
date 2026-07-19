@@ -101,12 +101,15 @@ function getConfig() {
       }
     }
     case "prod": {
+      // Forks publish desktop builds to their own repo; the updater must then
+      // also point there or installed apps would auto-update from upstream.
+      const [publishOwner, publishRepo] = (process.env.OPENCODE_PUBLISH_REPO ?? "anomalyco/opencode").split("/")
       return {
         ...base,
         appId: "ai.opencode.desktop",
         productName: "OpenCode",
         protocols: { name: "OpenCode", schemes: ["opencode"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "opencode", channel: "latest" },
+        publish: { provider: "github", owner: publishOwner, repo: publishRepo, channel: "latest" },
         rpm: { packageName: "opencode" },
       }
     }
