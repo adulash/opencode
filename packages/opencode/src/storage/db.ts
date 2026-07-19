@@ -28,8 +28,11 @@ export const NotFoundError = NamedError.create(
 const log = Log.create({ service: "db" })
 
 export function getChannelPath() {
+  // The Arabic fork keeps its own database file: this schema tracks the fork's
+  // migration set, and sharing opencode.db with an official opencode install
+  // (whose newer/older schema differs) corrupts queries in both directions.
   if (["latest", "beta", "prod"].includes(InstallationChannel) || Flag.OPENCODE_DISABLE_CHANNEL_DB)
-    return path.join(Global.Path.data, "opencode.db")
+    return path.join(Global.Path.data, "opencode-ar.db")
   const safe = InstallationChannel.replace(/[^a-zA-Z0-9._-]/g, "-")
   return path.join(Global.Path.data, `opencode-${safe}.db`)
 }

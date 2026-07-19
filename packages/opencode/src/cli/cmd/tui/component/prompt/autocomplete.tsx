@@ -1,4 +1,4 @@
-import type { BoxRenderable, TextareaRenderable, ScrollBoxRenderable } from "@opentui/core"
+import { RGBA, type BoxRenderable, type TextareaRenderable, type ScrollBoxRenderable } from "@opentui/core"
 import { pathToFileURL } from "bun"
 import fuzzysort from "fuzzysort"
 import path from "path"
@@ -86,6 +86,16 @@ export function Autocomplete(props: {
   const sync = useSync()
   const command = useCommandPalette()
   const { theme } = useTheme()
+  // textMuted is too faint for the suggestion descriptions in many terminal
+  // themes; blend it toward the full text color for readability.
+  const descriptionFg = createMemo(() =>
+    RGBA.fromValues(
+      theme.text.r * 0.6 + theme.textMuted.r * 0.4,
+      theme.text.g * 0.6 + theme.textMuted.g * 0.4,
+      theme.text.b * 0.6 + theme.textMuted.b * 0.4,
+      1,
+    ),
+  )
   const dimensions = useTerminalDimensions()
   const frecency = useFrecency()
   const tuiConfig = useTuiConfig()
@@ -860,7 +870,7 @@ export function Autocomplete(props: {
                 {option().display}
               </text>
               <Show when={option().description}>
-                <text fg={index === store.selected ? selectedForeground(theme) : theme.textMuted} wrapMode="none">
+                <text fg={index === store.selected ? selectedForeground(theme) : descriptionFg()} wrapMode="none">
                   {option().description}
                 </text>
               </Show>

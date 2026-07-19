@@ -45,6 +45,10 @@
     opacity: var(--indicator-opacity, 1);
     pointer-events: none;
     position: absolute;
+    /* Kobalte positions the pill with translate() from offsetLeft, which is
+       physical-LTR math; pin the origin so dir=rtl doesn't mirror the anchor. */
+    left: 0;
+    top: 0;
     transition:
       opacity 200ms ease-out,
       box-shadow 100ms ease-in-out,
