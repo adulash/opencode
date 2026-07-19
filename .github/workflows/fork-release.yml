@@ -129,6 +129,7 @@ jobs:
         env:
           OPENCODE_CHANNEL: prod
           OPENCODE_PUBLISH_REPO: ${{ github.repository }}
+          OPENCODE_SKIP_ELECTRON_REBUILD: "1"
         run: npx electron-builder --win --publish never --config electron-builder.config.ts
 
       - name: Upload desktop installer

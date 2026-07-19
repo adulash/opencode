@@ -28,6 +28,10 @@ const channel = (() => {
 
 const getBase = (): Configuration => ({
   artifactName: "opencode-desktop-${os}-${arch}.${ext}",
+  // The bundled native modules ship N-API prebuilds that run under Electron
+  // as-is; fork CI runners have no Visual Studio toolchain, so they opt out
+  // of the redundant @electron/rebuild pass.
+  npmRebuild: process.env.OPENCODE_SKIP_ELECTRON_REBUILD !== "1",
   directories: {
     output: "dist",
     buildResources: "resources",
