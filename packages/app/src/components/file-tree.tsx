@@ -1,6 +1,5 @@
 import { useFile } from "@/context/file"
 import { encodeFilePath } from "@/context/file/path"
-import { useLanguage } from "@/context/language"
 import { Collapsible } from "@opencode-ai/ui/collapsible"
 import { FileIcon } from "@opencode-ai/ui/file-icon"
 import { Icon } from "@opencode-ai/ui/icon"
@@ -210,7 +209,6 @@ export default function FileTree(props: {
   _chain?: readonly string[]
 }) {
   const file = useFile()
-  const language = useLanguage()
   const level = props.level ?? 0
   const draggable = () => props.draggable ?? true
 
@@ -386,7 +384,7 @@ export default function FileTree(props: {
   })
 
   return (
-    <div data-component="filetree" class={`flex flex-col gap-0.5 ${props.class ?? ""}`}>
+    <div data-component="filetree" dir="ltr" class={`flex flex-col gap-0.5 ${props.class ?? ""}`}>
       <For each={nodes()}>
         {(node) => {
           const expanded = () => file.tree.state(node.path)?.expanded ?? false
@@ -417,9 +415,7 @@ export default function FileTree(props: {
                     >
                       <div class="size-4 flex items-center justify-center text-icon-weak">
                         <Icon
-                          name={
-                            expanded() ? "chevron-down" : language.dir() === "rtl" ? "chevron-left" : "chevron-right"
-                          }
+                          name={expanded() ? "chevron-down" : "chevron-right"}
                           size="small"
                         />
                       </div>

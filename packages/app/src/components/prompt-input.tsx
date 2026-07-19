@@ -565,6 +565,11 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
       .map((agent): AtOption => ({ type: "agent", name: agent.name, display: agent.name })),
   )
   const agentNames = createMemo(() => local.agent.list().map((agent) => agent.name))
+  const agentLabelKey = { build: "agent.name.build", plan: "agent.name.plan" } as const
+  const agentLabel = (name: string) => {
+    const key = agentLabelKey[name as keyof typeof agentLabelKey]
+    return key ? language.t(key) : name
+  }
 
   const handleAtSelect = (option: AtOption | undefined) => {
     if (!option) return
@@ -1492,6 +1497,8 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
                         size="normal"
                         options={agentNames()}
                         current={local.agent.current()?.name ?? ""}
+                        label={agentLabel}
+                        textValue={(name) => name}
                         onSelect={(value) => {
                           local.agent.set(value)
                           restoreFocus()

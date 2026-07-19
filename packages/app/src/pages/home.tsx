@@ -103,9 +103,11 @@ export default function Home() {
                     class="text-14-mono text-left justify-between px-3"
                     onClick={() => openProject(project.worktree)}
                   >
-                    {project.worktree.replace(homedir(), "~")}
+                    <span dir="ltr">{project.worktree.replace(homedir(), "~")}</span>
                     <div class="text-14-regular text-text-weak">
-                      {DateTime.fromMillis(project.time.updated ?? project.time.created).toRelative()}
+                      {DateTime.fromMillis(project.time.updated ?? project.time.created)
+                        .setLocale(language.intl())
+                        .toRelative()}
                     </div>
                   </Button>
                 )}
