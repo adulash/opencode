@@ -28,23 +28,30 @@ jobs:
 
       - uses: ./.github/actions/setup-bun
 
+      # The dispatch input is passed through env, never interpolated into the
+      # script text, so special characters cannot inject shell.
       - name: Resolve version
         id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
-          if [ -n "${{ inputs.version }}" ]; then
-            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-          fi
+          version="${INPUT_VERSION:-$GITHUB_REF_NAME}"
+          version="${version#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Create GitHub release
+      # Draft first: installers resolve releases/latest, so the release must
+      # only become visible once every binary is uploaded.
+      - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: v${{ steps.version.outputs.version }}
         run: |
-          gh release view "v${{ steps.version.outputs.version }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
-            gh release create "v${{ steps.version.outputs.version }}" \
+          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create "$RELEASE_TAG" \
               --repo "$GITHUB_REPOSITORY" \
-              --title "v${{ steps.version.outputs.version }}" \
+              --title "$RELEASE_TAG" \
+              --target "$GITHUB_SHA" \
+              --draft \
               --generate-notes
 
       # build.ts compiles every target, zips dist/*, and uploads the archives
@@ -57,3 +64,9 @@ jobs:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
         run: bun run script/build.ts
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: v${{ steps.version.outputs.version }}
+        run: gh release edit "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --draft=false
