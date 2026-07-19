@@ -29,30 +29,47 @@ jobs:
       - uses: ./.github/actions/setup-bun
 
       # The dispatch input is passed through env, never interpolated into the
-      # script text, so special characters cannot inject shell.
+      # script text, so special characters cannot inject shell. The strict
+      # format check also keeps newlines and malformed versions out of
+      # GITHUB_OUTPUT and the release tag.
       - name: Resolve version
         id: version
         env:
           INPUT_VERSION: ${{ inputs.version }}
         run: |
           version="${INPUT_VERSION:-$GITHUB_REF_NAME}"
+          version="$(printf '%s' "$version" | tr -d '[:space:]')"
           version="${version#v}"
+          version="${version#V}"
+          if ! printf '%s' "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$'; then
+            echo "::error::Invalid version '$version' — expected MAJOR.MINOR.PATCH with optional prerelease (e.g. 1.0.0-ar.1)"
+            exit 1
+          fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       # Draft first: installers resolve releases/latest, so the release must
-      # only become visible once every binary is uploaded.
+      # only become visible once every binary is uploaded. A published tag is
+      # never rebuilt in place (that would recreate the asset-less window for
+      # users mid-download); a stale draft from a failed run is recreated so
+      # its tag target matches the sha this run builds.
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: v${{ steps.version.outputs.version }}
         run: |
-          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
-            gh release create "$RELEASE_TAG" \
-              --repo "$GITHUB_REPOSITORY" \
-              --title "$RELEASE_TAG" \
-              --target "$GITHUB_SHA" \
-              --draft \
-              --generate-notes
+          if state="$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft 2>/dev/null)"; then
+            if [ "$state" = "false" ]; then
+              echo "::error::$RELEASE_TAG is already published — bump the version instead of re-releasing it"
+              exit 1
+            fi
+            gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
+          fi
+          gh release create "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$RELEASE_TAG" \
+            --target "$GITHUB_SHA" \
+            --draft \
+            --generate-notes
 
       # build.ts compiles every target, zips dist/*, and uploads the archives
       # to the release itself when OPENCODE_RELEASE is set (see Script.release).
