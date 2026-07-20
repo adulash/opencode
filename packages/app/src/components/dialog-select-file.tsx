@@ -436,6 +436,7 @@ export function DialogSelectFile(props: { mode?: DialogSelectFileMode; onOpenFil
                   <Icon name="bubble-5" size="small" class="shrink-0 text-icon-weak" />
                   <div class="flex items-center gap-2 min-w-0">
                     <span
+                      dir="auto"
                       class="text-14-regular text-text-strong truncate"
                       classList={{ "opacity-70": !!item.archived }}
                     >

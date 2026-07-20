@@ -183,7 +183,14 @@ export function Titlebar() {
     >
       <div
         class="grid h-full min-h-full w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center"
-        style={{ zoom: counterZoom() }}
+        style={{
+          zoom: counterZoom(),
+          // Native Windows caption buttons are always drawn in the physical
+          // top-right corner, even under dir=rtl. Reserve that corner with a
+          // physical padding-right (not padding-inline-end, which flips with
+          // dir) so the app's own titlebar controls never overlap them.
+          "padding-right": windows() && !tauriApi() ? windowsControlsWidth() : undefined,
+        }}
       >
         <div
           classList={{
@@ -326,7 +333,6 @@ export function Titlebar() {
         >
           <div id="opencode-titlebar-right" class="flex items-center gap-1 shrink-0 justify-end" />
           <Show when={windows()}>
-            {!tauriApi() && <div class="shrink-0" style={{ width: windowsControlsWidth() }} />}
             <div data-tauri-decorum-tb class="flex flex-row" />
           </Show>
         </div>

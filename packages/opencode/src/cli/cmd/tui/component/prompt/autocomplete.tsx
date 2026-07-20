@@ -86,13 +86,14 @@ export function Autocomplete(props: {
   const sync = useSync()
   const command = useCommandPalette()
   const { theme } = useTheme()
-  // textMuted is too faint for the suggestion descriptions in many terminal
-  // themes; blend it toward the full text color for readability.
+  // textMuted is too faint for the suggestion text in many terminal themes.
+  // Keep it just slightly dimmer than the full text color so the suggested
+  // completion stays clearly readable while remaining visually secondary.
   const descriptionFg = createMemo(() =>
     RGBA.fromValues(
-      theme.text.r * 0.6 + theme.textMuted.r * 0.4,
-      theme.text.g * 0.6 + theme.textMuted.g * 0.4,
-      theme.text.b * 0.6 + theme.textMuted.b * 0.4,
+      theme.text.r * 0.85 + theme.textMuted.r * 0.15,
+      theme.text.g * 0.85 + theme.textMuted.g * 0.15,
+      theme.text.b * 0.85 + theme.textMuted.b * 0.15,
       1,
     ),
   )

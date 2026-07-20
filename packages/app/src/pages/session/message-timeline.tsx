@@ -740,6 +740,7 @@ export function MessageTimeline(props: {
                       <Show when={parentID()}>
                         <button
                           type="button"
+                          dir="auto"
                           data-slot="session-title-parent"
                           class="min-w-0 max-w-[40%] truncate text-14-medium text-text-weak transition-colors hover:text-text-base"
                           onClick={navigateParent}
@@ -776,6 +777,7 @@ export function MessageTimeline(props: {
                           when={title.editing}
                           fallback={
                             <h1
+                              dir="auto"
                               data-slot="session-title-child"
                               class="text-14-medium text-text-strong truncate grow-1 min-w-0"
                               onDblClick={openTitleEditor}
@@ -788,6 +790,7 @@ export function MessageTimeline(props: {
                             ref={(el) => {
                               titleRef = el
                             }}
+                            dir="auto"
                             data-slot="session-title-child"
                             value={title.draft}
                             disabled={titleMutation.isPending}

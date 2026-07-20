@@ -115,7 +115,7 @@ const SessionRow = (props: {
   return (
     <A
       href={`/${props.slug}/session/${props.session.id}`}
-      class={`flex items-center gap-2 min-w-0 w-full text-left focus:outline-none ${props.dense ? "py-0.5" : "py-1"}`}
+      class={`flex items-center gap-2 min-w-0 w-full text-start focus:outline-none ${props.dense ? "py-0.5" : "py-1"}`}
       onPointerDown={props.warmPress}
       onFocus={props.warmFocus}
       onClick={() => {
@@ -144,7 +144,7 @@ const SessionRow = (props: {
           </Switch>
         </div>
       </Show>
-      <span class="text-14-regular text-text-strong min-w-0 flex-1 truncate">{title()}</span>
+      <span dir="auto" class="text-14-regular text-text-strong min-w-0 flex-1 truncate">{title()}</span>
     </A>
   )
 }
@@ -304,7 +304,7 @@ export const NewSessionItem = (props: {
     <A
       href={`/${props.slug}/session`}
       end
-      class={`flex items-center gap-2 min-w-0 w-full text-left focus:outline-none ${props.dense ? "py-0.5" : "py-1"}`}
+      class={`flex items-center gap-2 min-w-0 w-full text-start focus:outline-none ${props.dense ? "py-0.5" : "py-1"}`}
       onClick={() => {
         if (layout.sidebar.opened()) return
         props.clearHoverProjectSoon()
