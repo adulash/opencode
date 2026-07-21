@@ -19,9 +19,12 @@ Options:
     -b, --binary <path>     Install from a local binary instead of downloading
         --no-modify-path    Don't modify shell config files (.zshrc, .bashrc, etc.)
 
+Environment overrides:
+    OPENCODE_REPO           GitHub repo to install from (default: adulash/opencode)
+
 Examples:
-    curl -fsSL https://opencode.ai/install | bash
-    curl -fsSL https://opencode.ai/install | bash -s -- --version 1.0.180
+    curl -fsSL https://raw.githubusercontent.com/adulash/opencode/dev/install | bash
+    curl -fsSL https://raw.githubusercontent.com/adulash/opencode/dev/install | bash -s -- --version 1.0.180
     ./install --binary /path/to/opencode
 EOF
 }

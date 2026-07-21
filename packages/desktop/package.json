@@ -4,10 +4,18 @@
   "version": "1.14.48",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://opencode.ai",
+  "homepage": "https://github.com/adulash/opencode",
   "author": {
-    "name": "OpenCode",
-    "email": "hello@opencode.ai"
+    "name": "adulash",
+    "email": "adula.dev@gmail.com",
+    "url": "https://github.com/adulash"
+  },
+  "bugs": {
+    "url": "https://github.com/adulash/opencode/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adulash/opencode.git"
   },
   "scripts": {
     "typecheck": "tsgo -b",

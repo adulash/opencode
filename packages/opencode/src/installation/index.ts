@@ -3,6 +3,8 @@ import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } fr
 import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
+import fs from "node:fs/promises"
+import { tmpdir } from "node:os"
 import path from "path"
 import z from "zod"
 import { BusEvent } from "@/bus/bus-event"
@@ -14,6 +16,21 @@ import { InstallationChannel, InstallationVersion } from "@opencode-ai/core/inst
 import { NpmConfig } from "@opencode-ai/core/npm-config"
 
 const log = Log.create({ service: "installation" })
+
+// This fork publishes its own GitHub releases, so the update check must point
+// here and not upstream — otherwise installs would be offered upstream builds.
+// Override with OPENCODE_RELEASE_REPO ("owner/repo") when building another fork.
+const RELEASE_REPO = process.env["OPENCODE_RELEASE_REPO"] ?? "adulash/opencode"
+
+// `curl` installs upgrade by piping this repo's own install script into bash,
+// not upstream's, so the script defaults to this fork's releases.
+const INSTALL_SCRIPT_BRANCH = process.env["OPENCODE_INSTALL_SCRIPT_BRANCH"] ?? "dev"
+const INSTALL_SCRIPT_URL =
+  process.env["OPENCODE_INSTALL_SCRIPT_URL"] ??
+  `https://raw.githubusercontent.com/${RELEASE_REPO}/${INSTALL_SCRIPT_BRANCH}/install`
+const INSTALL_PS1_URL =
+  process.env["OPENCODE_INSTALL_PS1_URL"] ??
+  `https://raw.githubusercontent.com/${RELEASE_REPO}/${INSTALL_SCRIPT_BRANCH}/install.ps1`
 
 export type Method = "curl" | "npm" | "yarn" | "pnpm" | "bun" | "brew" | "scoop" | "choco" | "unknown"
 
@@ -143,14 +160,48 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient | ChildPro
 
       const upgradeCurl = Effect.fnUntraced(
         function* (target: string) {
-          const response = yield* httpOk.execute(HttpClientRequest.get("https://opencode.ai/install"))
+          const response = yield* httpOk.execute(HttpClientRequest.get(INSTALL_SCRIPT_URL))
           const body = yield* response.text
           const bodyBytes = new TextEncoder().encode(body)
           const proc = ChildProcess.make("bash", [], {
             stdin: Stream.make(bodyBytes),
-            env: { VERSION: target },
+            // OPENCODE_REPO keeps the script downloading binaries from the same
+            // repo the update check resolved the version from.
+            env: { VERSION: target, OPENCODE_REPO: RELEASE_REPO },
             extendEnv: true,
           })
+          const handle = yield* spawner.spawn(proc)
+          const [stdout, stderr] = yield* Effect.all(
+            [Stream.mkString(Stream.decodeText(handle.stdout)), Stream.mkString(Stream.decodeText(handle.stderr))],
+            { concurrency: 2 },
+          )
+          const code = yield* handle.exitCode
+          return { code, stdout, stderr }
+        },
+        Effect.scoped,
+        Effect.orDie,
+      )
+
+      // Windows installs land in %USERPROFILE%\.opencode\bin, which method()
+      // reports as "curl" — but the POSIX install script needs bash and unzip,
+      // and Windows ships neither. Run the PowerShell installer instead.
+      const upgradePowershell = Effect.fnUntraced(
+        function* (target: string) {
+          const response = yield* httpOk.execute(HttpClientRequest.get(INSTALL_PS1_URL))
+          const body = yield* response.text
+          const script = path.join(tmpdir(), `opencode-install-${process.pid}.ps1`)
+          yield* Effect.promise(() => fs.writeFile(script, body, "utf8"))
+          yield* Effect.addFinalizer(() => Effect.promise(() => fs.rm(script, { force: true }).catch(() => {})))
+          const proc = ChildProcess.make(
+            "powershell",
+            ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", script, "-Version", target],
+            {
+              // STRICT makes the installer exit non-zero on failure; it defaults
+              // off so `irm ... | iex` never exits an interactive shell.
+              env: { OPENCODE_REPO: RELEASE_REPO, OPENCODE_INSTALLER_STRICT: "1" },
+              extendEnv: true,
+            },
+          )
           const handle = yield* spawner.spawn(proc)
           const [stdout, stderr] = yield* Effect.all(
             [Stream.mkString(Stream.decodeText(handle.stdout)), Stream.mkString(Stream.decodeText(handle.stderr))],
@@ -254,7 +305,7 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient | ChildPro
           }
 
           const response = yield* httpOk.execute(
-            HttpClientRequest.get("https://api.github.com/repos/anomalyco/opencode/releases/latest").pipe(
+            HttpClientRequest.get(`https://api.github.com/repos/${RELEASE_REPO}/releases/latest`).pipe(
               HttpClientRequest.acceptJson,
             ),
           )
@@ -265,7 +316,7 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient | ChildPro
           let upgradeResult: { code: ChildProcessSpawner.ExitCode; stdout: string; stderr: string } | undefined
           switch (m) {
             case "curl":
-              upgradeResult = yield* upgradeCurl(target)
+              upgradeResult = yield* (process.platform === "win32" ? upgradePowershell(target) : upgradeCurl(target))
               break
             case "npm":
               upgradeResult = yield* run(["npm", "install", "-g", `opencode-ai@${target}`])

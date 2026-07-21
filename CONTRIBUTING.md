@@ -1,5 +1,11 @@
 # Contributing to OpenCode
 
+> **About this repository / حول هذا المستودع**
+>
+> This is an independent fork of [OpenCode](https://github.com/anomalyco/opencode), localized into Arabic (interface translations, docs and RTL support) and maintained by [adulash](https://github.com/adulash).
+> Contributions, questions and bug reports for **this fork** go to [github.com/adulash/opencode](https://github.com/adulash/opencode) — issues, [discussions](https://github.com/adulash/opencode/discussions), or email <adula.dev@gmail.com>.
+> Please do not send them to the upstream project; if a problem also exists in upstream OpenCode, report it there separately.
+
 We want to make it easy for you to contribute to OpenCode. Here are the most common type of changes that get merged:
 
 - Bug fixes
@@ -14,10 +20,10 @@ However, any UI or core product feature must go through a design review with the
 
 If you are unsure if a PR would be accepted, feel free to ask a maintainer or look for issues with any of the following labels:
 
-- [`help wanted`](https://github.com/anomalyco/opencode/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelp-wanted)
-- [`good first issue`](https://github.com/anomalyco/opencode/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
-- [`bug`](https://github.com/anomalyco/opencode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
-- [`perf`](https://github.com/anomalyco/opencode/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22perf%22)
+- [`help wanted`](https://github.com/adulash/opencode/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelp-wanted)
+- [`good first issue`](https://github.com/adulash/opencode/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
+- [`bug`](https://github.com/adulash/opencode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
+- [`perf`](https://github.com/adulash/opencode/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22perf%22)
 
 > [!NOTE]
 > PRs that ignore these guardrails will likely be closed.
@@ -259,7 +265,7 @@ This project uses [vouch](https://github.com/mitchellh/vouch) to manage contribu
 ### How it works
 
 - **Vouched users** are explicitly trusted contributors.
-- **Denounced users** are explicitly blocked. Issues and pull requests from denounced users are automatically closed. If you have been denounced, you can request to be unvouched by reaching out to a maintainer on [Discord](https://opencode.ai/discord)
+- **Denounced users** are explicitly blocked. Issues and pull requests from denounced users are automatically closed. If you have been denounced, you can request to be unvouched by reaching out to the maintainer at <adula.dev@gmail.com> or in [GitHub Discussions](https://github.com/adulash/opencode/discussions)
 - **Everyone else** can participate normally — you don't need to be vouched to open issues or PRs.
 
 ### For maintainers

@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 💬 Discord Community
-    url: https://discord.gg/opencode
-    about: For quick questions or real-time discussion. Note that issues are searchable and help others with the same question.
+  - name: 💬 Discussions / النقاشات
+    url: https://github.com/adulash/opencode/discussions
+    about: For quick questions or general discussion. Note that issues are searchable and help others with the same question.
+  - name: ✉️ Contact the maintainer / تواصل مع المطور
+    url: mailto:adula.dev@gmail.com
+    about: For anything that does not fit a public issue (private reports, licensing, Arabic localization feedback).

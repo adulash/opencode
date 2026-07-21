@@ -121,17 +121,20 @@ export function createMenu(deps: Deps) {
       label: "Help",
       submenu: [
         { label: "OpenCode Documentation", click: () => shell.openExternal("https://opencode.ai/docs") },
-        { label: "Support Forum", click: () => shell.openExternal("https://discord.com/invite/opencode") },
-        { type: "separator" },
+        {
+          label: "Support & Discussions",
+          click: () => shell.openExternal("https://github.com/adulash/opencode/discussions"),
+        },
+        { label: "Contact the Maintainer", click: () => shell.openExternal("mailto:adula.dev@gmail.com") },
         { type: "separator" },
         {
           label: "Share Feedback",
           click: () =>
-            shell.openExternal("https://github.com/anomalyco/opencode/issues/new?template=feature_request.yml"),
+            shell.openExternal("https://github.com/adulash/opencode/issues/new?template=feature-request.yml"),
         },
         {
           label: "Report a Bug",
-          click: () => shell.openExternal("https://github.com/anomalyco/opencode/issues/new?template=bug_report.yml"),
+          click: () => shell.openExternal("https://github.com/adulash/opencode/issues/new?template=bug-report.yml"),
         },
       ],
     },

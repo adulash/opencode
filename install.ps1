@@ -5,12 +5,27 @@
 #   & ./install.ps1 -Version 1.0.0-ar.1
 #
 # Environment overrides:
-#   OPENCODE_REPO    GitHub repo to install from (default: adulash/opencode)
+#   OPENCODE_REPO              GitHub repo to install from (default: adulash/opencode)
+#   OPENCODE_INSTALLER_STRICT  Set to 1 to exit with code 1 on failure. Off by
+#                              default so `irm ... | iex` cannot close the shell.
 
 param(
   [string]$Version,
   [string]$Repo
 )
+
+# `exit` would close the caller's shell when this script runs via `irm ... | iex`,
+# so a failure only sets a process exit code when the caller opts in. `opencode
+# upgrade` sets OPENCODE_INSTALLER_STRICT=1; without it a failed install would be
+# reported back to the CLI as a successful upgrade. Set it for scripted installs
+# too — interactive `iex` users must never get an `exit`.
+$script:strictExit = $env:OPENCODE_INSTALLER_STRICT -eq "1"
+
+function Write-Failure {
+  param([string[]]$Message)
+  foreach ($line in $Message) { [Console]::Error.WriteLine($line) }
+  if ($script:strictExit) { exit 1 }
+}
 
 $prevErrorActionPreference = $ErrorActionPreference
 $prevProgressPreference = $ProgressPreference
@@ -55,7 +70,7 @@ public static extern IntPtr SendMessageTimeout(IntPtr hWnd, int Msg, UIntPtr wPa
     "AMD64" { $arch = "x64" }
   }
   if (-not $arch) {
-    [Console]::Error.WriteLine("Unsupported machine architecture '$machineArch' - opencode ships x64 and arm64 Windows builds only.")
+    Write-Failure "Unsupported machine architecture '$machineArch' - opencode ships x64 and arm64 Windows builds only."
     return
   }
 
@@ -73,9 +88,11 @@ public static extern IntPtr SendMessageTimeout(IntPtr hWnd, int Msg, UIntPtr wPa
       $latest = Invoke-RestMethod "https://api.github.com/repos/$Repo/releases/latest"
     }
     catch {
-      [Console]::Error.WriteLine("Failed to fetch release information from $Repo.")
-      [Console]::Error.WriteLine("The repository may have no published release yet, or the GitHub API rate limit was hit.")
-      [Console]::Error.WriteLine("Retry later, or pass a version explicitly: install.ps1 -Version <version>")
+      Write-Failure @(
+        "Failed to fetch release information from $Repo."
+        "The repository may have no published release yet, or the GitHub API rate limit was hit."
+        "Retry later, or pass a version explicitly: install.ps1 -Version <version>"
+      )
       return
     }
     $Version = $latest.tag_name
@@ -96,8 +113,10 @@ public static extern IntPtr SendMessageTimeout(IntPtr hWnd, int Msg, UIntPtr wPa
       Invoke-WebRequest -Uri $url -OutFile $zipPath
     }
     catch {
-      [Console]::Error.WriteLine("Download failed: $url")
-      [Console]::Error.WriteLine("Check that release v$Version exists and includes ${filename}: https://github.com/$Repo/releases")
+      Write-Failure @(
+        "Download failed: $url"
+        "Check that release v$Version exists and includes ${filename}: https://github.com/$Repo/releases"
+      )
       return
     }
     Expand-Archive -Path $zipPath -DestinationPath $tmpDir -Force
@@ -114,7 +133,7 @@ public static extern IntPtr SendMessageTimeout(IntPtr hWnd, int Msg, UIntPtr wPa
         $movedAside = $true
       }
       catch {
-        [Console]::Error.WriteLine("Could not replace $target. Close running opencode instances and retry.")
+        Write-Failure "Could not replace $target. Close running opencode instances and retry."
         return
       }
     }
@@ -172,6 +191,15 @@ public static extern IntPtr SendMessageTimeout(IntPtr hWnd, int Msg, UIntPtr wPa
 
   Write-Host ""
   Write-Host "opencode v$Version installed. Run: opencode"
+}
+catch {
+  # Only intercept for opted-in callers: piped into `iex` the caller expects the
+  # terminating error itself, not a process exit.
+  if ($script:strictExit) {
+    [Console]::Error.WriteLine($_.Exception.Message)
+    exit 1
+  }
+  throw
 }
 finally {
   $ErrorActionPreference = $prevErrorActionPreference

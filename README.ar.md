@@ -9,34 +9,14 @@
 </p>
 <p align="center">وكيل برمجة بالذكاء الاصطناعي مفتوح المصدر.</p>
 <p align="center">
-  <a href="https://opencode.ai/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
-  <a href="https://www.npmjs.com/package/opencode-ai"><img alt="npm" src="https://img.shields.io/npm/v/opencode-ai?style=flat-square" /></a>
-  <a href="https://github.com/anomalyco/opencode/actions/workflows/publish.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/anomalyco/opencode/publish.yml?style=flat-square&branch=dev" /></a>
+  <a href="https://github.com/adulash/opencode"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-adulash%2Fopencode-181717?style=flat-square&logo=github" /></a>
+  <a href="mailto:adula.dev@gmail.com"><img alt="Email" src="https://img.shields.io/badge/email-adula.dev%40gmail.com-blue?style=flat-square" /></a>
+  <a href="https://github.com/adulash/opencode/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/adulash/opencode?style=flat-square" /></a>
 </p>
 
 <p align="center">
   <a href="README.md">English</a> |
-  <a href="README.zh.md">简体中文</a> |
-  <a href="README.zht.md">繁體中文</a> |
-  <a href="README.ko.md">한국어</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.it.md">Italiano</a> |
-  <a href="README.da.md">Dansk</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.pl.md">Polski</a> |
-  <a href="README.ru.md">Русский</a> |
-  <a href="README.bs.md">Bosanski</a> |
-  <a href="README.ar.md">العربية</a> |
-  <a href="README.no.md">Norsk</a> |
-  <a href="README.br.md">Português (Brasil)</a> |
-  <a href="README.th.md">ไทย</a> |
-  <a href="README.tr.md">Türkçe</a> |
-  <a href="README.uk.md">Українська</a> |
-  <a href="README.bn.md">বাংলা</a> |
-  <a href="README.gr.md">Ελληνικά</a> |
-  <a href="README.vi.md">Tiếng Việt</a>
+  <a href="README.ar.md">العربية</a>
 </p>
 
 [![OpenCode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://opencode.ai)
@@ -46,41 +26,33 @@
 ### التثبيت
 
 ```bash
-# YOLO
-curl -fsSL https://opencode.ai/install | bash
-
-# مديري الحزم
-npm i -g opencode-ai@latest        # او bun/pnpm/yarn
-scoop install opencode             # Windows
-choco install opencode             # Windows
-brew install anomalyco/tap/opencode # macOS و Linux (موصى به، دائما محدث)
-brew install opencode              # macOS و Linux (صيغة brew الرسمية، تحديث اقل)
-sudo pacman -S opencode            # Arch Linux (Stable)
-paru -S opencode-bin               # Arch Linux (Latest from AUR)
-mise use -g opencode               # اي نظام
-nix run nixpkgs#opencode           # او github:anomalyco/opencode لاحدث فرع dev
+# Linux و macOS
+curl -fsSL https://raw.githubusercontent.com/adulash/opencode/dev/install | bash
 ```
+
+```powershell
+# Windows
+irm https://raw.githubusercontent.com/adulash/opencode/dev/install.ps1 | iex
+```
+
+يمكنك ايضا تنزيل الملف التنفيذي مباشرة من [صفحة الاصدارات](https://github.com/adulash/opencode/releases).
+
+> [!NOTE]
+> هذه النسخة تنشر اصداراتها الخاصة على GitHub، وهي **غير** منشورة على npm او Homebrew او Scoop او Chocolatey او AUR او nixpkgs — تلك الحزم تثبت OpenCode الاصلي بالانجليزية. استخدم الاوامر اعلاه للحصول على النسخة المعربة.
 
 > [!TIP]
 > احذف الاصدارات الاقدم من 0.1.x قبل التثبيت.
 
 ### تطبيق سطح المكتب (BETA)
 
-يتوفر OpenCode ايضا كتطبيق سطح مكتب. قم بالتنزيل مباشرة من [صفحة الاصدارات](https://github.com/anomalyco/opencode/releases) او من [opencode.ai/download](https://opencode.ai/download).
+يتوفر OpenCode ايضا كتطبيق سطح مكتب. نزله من [صفحة الاصدارات](https://github.com/adulash/opencode/releases) الخاصة بهذه النسخة.
 
-| المنصة                | التنزيل                            |
-| --------------------- | ---------------------------------- |
-| macOS (Apple Silicon) | `opencode-desktop-mac-arm64.dmg`   |
-| macOS (Intel)         | `opencode-desktop-mac-x64.dmg`     |
-| Windows               | `opencode-desktop-windows-x64.exe` |
-| Linux                 | `.deb` او `.rpm` او AppImage       |
+| المنصة  | التنزيل                        |
+| ------- | ------------------------------ |
+| Windows | `opencode-desktop-win-x64.exe` |
 
-```bash
-# macOS (Homebrew)
-brew install --cask opencode-desktop
-# Windows (Scoop)
-scoop bucket add extras; scoop install extras/opencode-desktop
-```
+> [!NOTE]
+> هذه النسخة تبني تطبيق سطح المكتب لنظام Windows فقط حاليا، والمثبت غير موقع رقميا لذا قد يظهر تحذير SmartScreen عند اول تشغيل. على macOS و Linux استخدم امر تثبيت سطر الاوامر اعلاه. التطبيق يحدث نفسه من اصدارات هذا المستودع.
 
 #### مجلد التثبيت
 
@@ -93,8 +65,8 @@ scoop bucket add extras; scoop install extras/opencode-desktop
 
 ```bash
 # امثلة
-OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash
-XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
+OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/adulash/opencode/dev/install | bash
+XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://raw.githubusercontent.com/adulash/opencode/dev/install | bash
 ```
 
 ### Agents
@@ -138,4 +110,33 @@ XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
 
 ---
 
-**انضم الى مجتمعنا** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)
+## التواصل مع المطور
+
+هذه النسخة يتولى صيانتها وتعريبها مطور مستقل. لأي سؤال او اقتراح او بلاغ عن خلل يخص هذه النسخة، استخدم القنوات التالية **وليس** قنوات مشروع OpenCode الاصلي:
+
+| القناة | الرابط |
+| --- | --- |
+| المستودع | [github.com/adulash/opencode](https://github.com/adulash/opencode) |
+| البلاغات والاقتراحات | [فتح issue جديد](https://github.com/adulash/opencode/issues/new/choose) |
+| النقاشات العامة | [GitHub Discussions](https://github.com/adulash/opencode/discussions) |
+| البريد الالكتروني | [adula.dev@gmail.com](mailto:adula.dev@gmail.com) |
+| الثغرات الامنية | [تقرير خاص عبر GitHub Security](https://github.com/adulash/opencode/security/advisories/new) — او راجع [SECURITY.md](./SECURITY.md) |
+
+---
+
+## المصدر الاصلي والتعريب
+
+هذا المشروع نسخة معدلة (fork) من مشروع **OpenCode** مفتوح المصدر:
+
+- **المشروع الاصلي:** [github.com/anomalyco/opencode](https://github.com/anomalyco/opencode) — [opencode.ai](https://opencode.ai)
+- **الرخصة:** MIT، وكل الحقوق والفضل في العمل الاصلي تعود لفريق OpenCode ومساهميه. راجع [LICENSE](./LICENSE).
+
+**ما الذي تغير في هذه النسخة؟** تم تعريب المشروع بشكل احترافي بواسطة [adulash](https://github.com/adulash):
+
+- ترجمة واجهات تطبيق سطح المكتب وواجهة الويب ولوحة التحكم الى العربية.
+- تعريب التوثيق.
+- دعم اتجاه الكتابة من اليمين الى اليسار (RTL) عبر الواجهات.
+- معالجة مشكلات المحاذاة والتباين وعرض النصوص العربية داخل واجهة الطرفية (TUI).
+- تعديلات وتحسينات اخرى.
+
+> هذه النسخة **غير رسمية** وغير مرتبطة بفريق OpenCode. لا ترسل بلاغات هذه النسخة الى المستودع الاصلي، والعكس صحيح: اذا كان الخلل موجودا في OpenCode الاصلي فمن الافضل الابلاغ عنه هناك ايضا.

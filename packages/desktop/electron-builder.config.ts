@@ -95,19 +95,20 @@ function getConfig() {
       }
     }
     case "beta": {
+      const [betaOwner, betaRepo] = (process.env.OPENCODE_PUBLISH_REPO ?? "adulash/opencode-beta").split("/")
       return {
         ...base,
         appId: "ai.opencode.desktop.beta",
         productName: "OpenCode Beta",
         protocols: { name: "OpenCode Beta", schemes: ["opencode"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "opencode-beta", channel: "latest" },
+        publish: { provider: "github", owner: betaOwner, repo: betaRepo, channel: "latest" },
         rpm: { packageName: "opencode-beta" },
       }
     }
     case "prod": {
       // Forks publish desktop builds to their own repo; the updater must then
       // also point there or installed apps would auto-update from upstream.
-      const [publishOwner, publishRepo] = (process.env.OPENCODE_PUBLISH_REPO ?? "anomalyco/opencode").split("/")
+      const [publishOwner, publishRepo] = (process.env.OPENCODE_PUBLISH_REPO ?? "adulash/opencode").split("/")
       return {
         ...base,
         appId: "ai.opencode.desktop",
