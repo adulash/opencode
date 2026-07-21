@@ -24,6 +24,7 @@ import { useSessionLayout } from "@/pages/session/session-layout"
 import { messageAgentColor } from "@/utils/agent"
 import { decode64 } from "@/utils/base64"
 import { Persist, persisted } from "@/utils/persist"
+import { DebugBarToggle } from "../debug-bar"
 import { StatusPopover } from "../status-popover"
 
 const OPEN_APPS = [
@@ -426,6 +427,11 @@ export function SessionHeader() {
                 </div>
               </Show>
               <div class="flex items-center gap-1">
+                {import.meta.env.DEV && (
+                  <Tooltip placement="bottom" value={language.t("debugBar.ariaLabel")}>
+                    <DebugBarToggle />
+                  </Tooltip>
+                )}
                 <Show when={status()}>
                   <Tooltip placement="bottom" value={language.t("status.popover.trigger")}>
                     <StatusPopover />

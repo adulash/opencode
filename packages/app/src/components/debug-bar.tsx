@@ -1,9 +1,33 @@
 import { useIsRouting, useLocation } from "@solidjs/router"
-import { batch, createEffect, onCleanup, onMount } from "solid-js"
+import { batch, createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import { createStore } from "solid-js/store"
 import { makeEventListener } from "@solid-primitives/event-listener"
+import { Button } from "@opencode-ai/ui/button"
+import { Icon } from "@opencode-ai/ui/icon"
 import { Tooltip } from "@opencode-ai/ui/tooltip"
 import { useLanguage } from "@/context/language"
+
+// Hidden by default: the panel is a fixed overlay and used to sit on top of the
+// controls in the bottom corner. DebugBar is only mounted while this is true, so
+// its PerformanceObservers and rAF loop cost nothing when it is closed.
+const [debugBarShown, setDebugBarShown] = createSignal(false)
+
+export { debugBarShown }
+
+export function DebugBarToggle() {
+  const language = useLanguage()
+  return (
+    <Button
+      variant="ghost"
+      class="titlebar-icon w-8 h-6 p-0 box-border shrink-0"
+      aria-label={language.t("debugBar.ariaLabel")}
+      aria-pressed={debugBarShown()}
+      onClick={() => setDebugBarShown((value) => !value)}
+    >
+      <Icon name="sliders" size="small" />
+    </Button>
+  )
+}
 
 type Mem = Performance & {
   memory?: {
@@ -363,7 +387,7 @@ export function DebugBar() {
   return (
     <aside
       aria-label={language.t("debugBar.ariaLabel")}
-      class="pointer-events-auto fixed bottom-3 right-3 z-50 w-[308px] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border border-border-base bg-surface-raised-stronger-non-alpha p-0.5 text-text-strong shadow-[var(--shadow-lg-border-base)] sm:bottom-4 sm:right-4 sm:w-[324px]"
+      class="pointer-events-auto fixed bottom-3 end-3 z-50 w-[308px] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border border-border-base bg-surface-raised-stronger-non-alpha p-0.5 text-text-strong shadow-[var(--shadow-lg-border-base)] sm:bottom-4 sm:end-4 sm:w-[324px]"
     >
       <div class="grid grid-cols-5 gap-px font-mono">
         <Cell
